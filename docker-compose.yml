@@ -1,0 +1,25 @@
+version: '2'
+services:
+  world-db:    
+    image: world-db:latest
+    environment:
+    - POSTGRES_USER=postgres
+    - POSTGRES_PASSWORD=postgres
+    ports:
+    - 5431:5432 # Адрес для доступа извне : внутренний
+    container_name: world-db
+  app:
+    image: app:latest
+    environment:
+    - DB_USERNAME=postgres
+    - DB_PASSWORD=postgres
+    - DB_ADDRESS=world-db
+    - DB_PORT=5432  # внутренний адрес контейнера базы (не внешний (справа))
+    - DB_NAME=world
+    - DB_SSL=disable
+    - SERVER_PORT=:8080
+    ports:
+    - 8082:8080 # Адрес подключения : адрес передачи с сервера
+    container_name: app
+    links:
+    - world-db
