@@ -5,8 +5,8 @@ Just russaino tutorialo
 2) Для успешного запуска должны быть установлены компоненты:
     - golang
         (+ доп штуки:)
-        $ go get -u github.com/gorilla/mux
-        $ go get -u github.com/lib/pq
+        - $ go get -u github.com/gorilla/mux
+        - $ go get -u github.com/lib/pq
     - docker CE
     - docker-compose
 
@@ -26,8 +26,8 @@ Just russaino tutorialo
     - DELETE /country/{id} - удаляет сущность с указанным ID
 
 6) Таблица имеет поля:
-    id
-    name (строка)
-    population (целое число)
+    - id
+    - name (строка)
+    - population (целое число)
 
 7) Просто пожелаю вам удачи :3
