@@ -8,6 +8,9 @@ import (
 	"net/http"
 	"strconv"
 
+	"github.com/jinzhu/gorm"
+	_ "github.com/jinzhu/gorm/dialects/postgres"
+
 	"github.com/gorilla/mux"
 	_ "github.com/lib/pq"
 )
@@ -15,19 +18,21 @@ import (
 //App comment
 type App struct {
 	Router *mux.Router
-	DB     *sql.DB
+	DB     *gorm.DB
 }
 
 //Initialize comment
 func (a *App) Initialize(host, port, user, password, dbname, sslmode string) {
+	log.Println("Connection...")
 	connectionString :=
 		fmt.Sprintf("host=%s port=%s user=%s password=%s dbname=%s sslmode=%s", host, port, user, password, dbname, sslmode)
 
 	var err error
-	a.DB, err = sql.Open("postgres", connectionString)
+	a.DB, err = gorm.Open("postgres", connectionString)
 	if err != nil {
 		log.Fatal(err)
 	}
+	log.Println("Connection successful")
 
 	a.Router = mux.NewRouter()
 	a.initializeRoutes()
@@ -40,17 +45,26 @@ func (a *App) Run(port string) {
 
 func (a *App) initializeRoutes() {
 
+	a.Router.HandleFunc("/", a.getCountries).
+		Queries(
+			"username", "{username}",
+			"email", "{email}",
+		).
+		Methods("GET")
 	a.Router.HandleFunc("/", a.getCountries).Methods("GET")
 	a.Router.HandleFunc("/countries", a.getCountries).Methods("GET")
 	a.Router.HandleFunc("/country", a.createCountry).Methods("POST")
 	a.Router.HandleFunc("/country/{id:[0-9]+}", a.getCountry).Methods("GET")
 	a.Router.HandleFunc("/country/{id:[0-9]+}", a.updateCountry).Methods("PUT")
 	a.Router.HandleFunc("/country/{id:[0-9]+}", a.deleteCountry).Methods("DELETE")
+
 }
 
 func (a *App) getCountries(w http.ResponseWriter, r *http.Request) {
-	count, _ := strconv.Atoi(r.FormValue("count"))
-	start, _ := strconv.Atoi(r.FormValue("start"))
+	v := r.URL.Query()
+
+	count, _ := strconv.Atoi(v.Get("count"))
+	start, _ := strconv.Atoi(v.Get("start"))
 
 	if count > 10 {
 		count = 10

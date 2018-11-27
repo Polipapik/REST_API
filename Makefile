@@ -1,7 +1,7 @@
 .PHONY: build up down clean
 
 build:
-		docker build -t world-db ./db
+		docker build -t world_db ./db
 		go build -o app/main app/main.go app/app.go app/model.go 
 		docker build -t app ./app
 		rm app/main
@@ -13,6 +13,6 @@ down:
 		docker-compose down
 
 clean:
-		docker rm world-db app
+		docker rm world_db app
 
 #remove:

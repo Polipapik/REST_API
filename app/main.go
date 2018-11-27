@@ -1,8 +1,11 @@
 package main
 
-import "os"
+import (
+	"os"
+)
 
 func main() {
+	//time.Sleep(5 * time.Second)
 	a := App{}
 	a.Initialize(
 		os.Getenv("DB_ADDRESS"),
