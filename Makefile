@@ -2,7 +2,7 @@
 
 build:
 		docker build -t world_db ./db
-		go build -o app/main app/main.go app/app.go app/model.go 
+		go build -o app/main app/main.go
 		docker build -t app ./app
 		rm app/main
 

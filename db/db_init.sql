@@ -9,7 +9,7 @@ CREATE TABLE countries(
 
 INSERT INTO countries (name, population) VALUES
     ('Russiano', 10000),
-    ('Ukraine', 700000000),
+    ('Ukraine', 7000000000),
     ('Keks', 200),
     ('JoJoFANS', 1000000);
     

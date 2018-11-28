@@ -2,11 +2,15 @@ package main
 
 import (
 	"os"
+
+	"github.com/Polipapik/REST_API/app/routes"
+	_ "github.com/jinzhu/gorm/dialects/postgres"
+	_ "github.com/lib/pq"
 )
 
 func main() {
 	//time.Sleep(5 * time.Second)
-	a := App{}
+	a := routes.App{}
 	a.Initialize(
 		os.Getenv("DB_ADDRESS"),
 		os.Getenv("DB_PORT"),
