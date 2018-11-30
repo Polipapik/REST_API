@@ -7,7 +7,7 @@ import (
 	"strconv"
 
 	"github.com/Polipapik/REST_API/app/models"
-	"github.com/Polipapik/REST_API/app/util"
+	"github.com/Polipapik/REST_API/app/utils"
 	"github.com/gorilla/mux"
 	"github.com/jinzhu/gorm"
 )
@@ -31,11 +31,11 @@ func GetCountries(db *gorm.DB, w http.ResponseWriter, r *http.Request) {
 
 	countries, err := models.GetСountries(db, start, count)
 	if err != nil {
-		util.RespondWithError(w, http.StatusInternalServerError, err.Error())
+		utils.RespondWithError(w, http.StatusInternalServerError, err.Error())
 		return
 	}
 
-	util.RespondWithJSON(w, http.StatusOK, countries)
+	utils.RespondWithJSON(w, http.StatusOK, countries)
 }
 
 //CreateCountry comment
@@ -43,17 +43,17 @@ func CreateCountry(db *gorm.DB, w http.ResponseWriter, r *http.Request) {
 	var c models.Country
 	decoder := json.NewDecoder(r.Body)
 	if err := decoder.Decode(&c); err != nil {
-		util.RespondWithError(w, http.StatusBadRequest, "Invalid request payload")
+		utils.RespondWithError(w, http.StatusBadRequest, "Invalid request payload")
 		return
 	}
 	defer r.Body.Close()
 
 	if err := c.CreateCountry(db); err != nil {
-		util.RespondWithError(w, http.StatusInternalServerError, err.Error())
+		utils.RespondWithError(w, http.StatusInternalServerError, err.Error())
 		return
 	}
 
-	util.RespondWithJSON(w, http.StatusCreated, c)
+	utils.RespondWithJSON(w, http.StatusCreated, c)
 }
 
 //GetCountry comment
@@ -61,7 +61,7 @@ func GetCountry(db *gorm.DB, w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	id, err := strconv.Atoi(vars["id"])
 	if err != nil {
-		util.RespondWithError(w, http.StatusBadRequest, "Invalid country ID")
+		utils.RespondWithError(w, http.StatusBadRequest, "Invalid country ID")
 		return
 	}
 
@@ -69,14 +69,14 @@ func GetCountry(db *gorm.DB, w http.ResponseWriter, r *http.Request) {
 	if err := c.GetCountry(db); err != nil {
 		switch err {
 		case sql.ErrNoRows:
-			util.RespondWithError(w, http.StatusNotFound, "Country not found")
+			utils.RespondWithError(w, http.StatusNotFound, "Country not found")
 		default:
-			util.RespondWithError(w, http.StatusInternalServerError, err.Error())
+			utils.RespondWithError(w, http.StatusInternalServerError, err.Error())
 		}
 		return
 	}
 
-	util.RespondWithJSON(w, http.StatusOK, c)
+	utils.RespondWithJSON(w, http.StatusOK, c)
 }
 
 //UpdateCountry comment
@@ -84,25 +84,25 @@ func UpdateCountry(db *gorm.DB, w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	id, err := strconv.Atoi(vars["id"])
 	if err != nil {
-		util.RespondWithError(w, http.StatusBadRequest, "Invalid country ID")
+		utils.RespondWithError(w, http.StatusBadRequest, "Invalid country ID")
 		return
 	}
 
 	var c models.Country
 	decoder := json.NewDecoder(r.Body)
 	if err := decoder.Decode(&c); err != nil {
-		util.RespondWithError(w, http.StatusBadRequest, "Invalid resquest payload")
+		utils.RespondWithError(w, http.StatusBadRequest, "Invalid resquest payload")
 		return
 	}
 	defer r.Body.Close()
 	c.ID = id
 
 	if err := c.UpdateCountry(db); err != nil {
-		util.RespondWithError(w, http.StatusInternalServerError, err.Error())
+		utils.RespondWithError(w, http.StatusInternalServerError, err.Error())
 		return
 	}
 
-	util.RespondWithJSON(w, http.StatusOK, c)
+	utils.RespondWithJSON(w, http.StatusOK, c)
 }
 
 //DeleteCountry comment
@@ -110,15 +110,15 @@ func DeleteCountry(db *gorm.DB, w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	id, err := strconv.Atoi(vars["id"])
 	if err != nil {
-		util.RespondWithError(w, http.StatusBadRequest, "Invalid Country ID")
+		utils.RespondWithError(w, http.StatusBadRequest, "Invalid Country ID")
 		return
 	}
 
 	c := models.Country{ID: id}
 	if err := c.DeleteCountry(db); err != nil {
-		util.RespondWithError(w, http.StatusInternalServerError, err.Error())
+		utils.RespondWithError(w, http.StatusInternalServerError, err.Error())
 		return
 	}
 
-	util.RespondWithJSON(w, http.StatusOK, map[string]string{"result": "success"})
+	utils.RespondWithJSON(w, http.StatusOK, map[string]string{"result": "success"})
 }
