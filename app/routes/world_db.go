@@ -34,7 +34,7 @@ func (a *App) Initialize(host, port, user, password, dbname, sslmode string) {
 	a.initializeRoutes()
 }
 
-//Run comment
+//Run comment kek
 func (a *App) Run(port string) {
 	log.Fatal(http.ListenAndServe(port, a.Router))
 }
@@ -80,5 +80,4 @@ func (a *App) initializeRoutes() {
 			handlers.DeleteCountry(a.DB, w, r)
 		}).
 		Methods("DELETE")
-
 }
