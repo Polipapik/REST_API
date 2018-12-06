@@ -18,7 +18,7 @@ func TestGetCountriesHandler(t *testing.T) {
 
 	var m models.MockDB
 	m.On("GetСountries").Return([]models.Country{
-		tmpcountry}).Once()
+		tmpcountry}, nil).Once()
 
 	req, err := http.NewRequest("GET", "", nil)
 	if err != nil {
