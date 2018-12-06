@@ -13,22 +13,23 @@ import (
 
 //GetCountries comment
 func GetCountries(db models.CountryAPI, w http.ResponseWriter, r *http.Request) {
-	v := r.URL.Query()
+	//v := r.URL.Query()
 
-	count, _ := strconv.Atoi(v.Get("count"))
-	start, _ := strconv.Atoi(v.Get("start"))
+	// count, _ := strconv.Atoi(v.Get("count"))
+	// start, _ := strconv.Atoi(v.Get("start"))
 
-	if count > 10 {
-		count = 10
-	}
-	if count < 1 {
-		count = 0
-	}
-	if start < 0 {
-		start = 0
-	}
+	// if count > 10 {
+	// 	count = 10
+	// }
+	// if count < 1 {
+	// 	count = 0
+	// }
+	// if start < 0 {
+	// 	start = 0
+	// }
 
-	countries, err := db.GetСountries(start, count)
+	//countries, err := db.GetСountries(start, count)
+	countries, err := db.GetСountries()
 	if err != nil {
 		utils.RespondWithError(w, http.StatusInternalServerError, err.Error())
 		return
