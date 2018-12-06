@@ -9,11 +9,10 @@ import (
 	"github.com/Polipapik/REST_API/app/models"
 	"github.com/Polipapik/REST_API/app/utils"
 	"github.com/gorilla/mux"
-	"github.com/jinzhu/gorm"
 )
 
 //GetCountries comment
-func GetCountries(db *gorm.DB, w http.ResponseWriter, r *http.Request) {
+func GetCountries(db models.CountryAPI, w http.ResponseWriter, r *http.Request) {
 	v := r.URL.Query()
 
 	count, _ := strconv.Atoi(v.Get("count"))
@@ -29,7 +28,7 @@ func GetCountries(db *gorm.DB, w http.ResponseWriter, r *http.Request) {
 		start = 0
 	}
 
-	countries, err := models.GetСountries(db, start, count)
+	countries, err := db.GetСountries(start, count)
 	if err != nil {
 		utils.RespondWithError(w, http.StatusInternalServerError, err.Error())
 		return
@@ -39,7 +38,7 @@ func GetCountries(db *gorm.DB, w http.ResponseWriter, r *http.Request) {
 }
 
 //CreateCountry comment
-func CreateCountry(db *gorm.DB, w http.ResponseWriter, r *http.Request) {
+func CreateCountry(db models.CountryAPI, w http.ResponseWriter, r *http.Request) {
 	var c models.Country
 	decoder := json.NewDecoder(r.Body)
 	if err := decoder.Decode(&c); err != nil {
@@ -48,7 +47,7 @@ func CreateCountry(db *gorm.DB, w http.ResponseWriter, r *http.Request) {
 	}
 	defer r.Body.Close()
 
-	if err := c.CreateCountry(db); err != nil {
+	if err := db.CreateCountry(&c); err != nil {
 		utils.RespondWithError(w, http.StatusInternalServerError, err.Error())
 		return
 	}
@@ -57,7 +56,7 @@ func CreateCountry(db *gorm.DB, w http.ResponseWriter, r *http.Request) {
 }
 
 //GetCountry comment
-func GetCountry(db *gorm.DB, w http.ResponseWriter, r *http.Request) {
+func GetCountry(db models.CountryAPI, w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	id, err := strconv.Atoi(vars["id"])
 	if err != nil {
@@ -66,7 +65,7 @@ func GetCountry(db *gorm.DB, w http.ResponseWriter, r *http.Request) {
 	}
 
 	c := models.Country{ID: id}
-	if err := c.GetCountry(db); err != nil {
+	if err := db.GetCountry(&c); err != nil {
 		switch err {
 		case sql.ErrNoRows:
 			utils.RespondWithError(w, http.StatusNotFound, "Country not found")
@@ -80,7 +79,7 @@ func GetCountry(db *gorm.DB, w http.ResponseWriter, r *http.Request) {
 }
 
 //UpdateCountry comment
-func UpdateCountry(db *gorm.DB, w http.ResponseWriter, r *http.Request) {
+func UpdateCountry(db models.CountryAPI, w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	id, err := strconv.Atoi(vars["id"])
 	if err != nil {
@@ -97,7 +96,7 @@ func UpdateCountry(db *gorm.DB, w http.ResponseWriter, r *http.Request) {
 	defer r.Body.Close()
 	c.ID = id
 
-	if err := c.UpdateCountry(db); err != nil {
+	if err := db.UpdateCountry(&c); err != nil {
 		utils.RespondWithError(w, http.StatusInternalServerError, err.Error())
 		return
 	}
@@ -106,7 +105,7 @@ func UpdateCountry(db *gorm.DB, w http.ResponseWriter, r *http.Request) {
 }
 
 //DeleteCountry comment
-func DeleteCountry(db *gorm.DB, w http.ResponseWriter, r *http.Request) {
+func DeleteCountry(db models.CountryAPI, w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	id, err := strconv.Atoi(vars["id"])
 	if err != nil {
@@ -115,7 +114,7 @@ func DeleteCountry(db *gorm.DB, w http.ResponseWriter, r *http.Request) {
 	}
 
 	c := models.Country{ID: id}
-	if err := c.DeleteCountry(db); err != nil {
+	if err := db.DeleteCountry(&c); err != nil {
 		utils.RespondWithError(w, http.StatusInternalServerError, err.Error())
 		return
 	}
