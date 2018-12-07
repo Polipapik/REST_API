@@ -1,4 +1,4 @@
-Just russaino tutorialo kek
+Just russaino tutorialo kenkins
 
 go get -u github.com/Polipapik/REST_API/app
 
