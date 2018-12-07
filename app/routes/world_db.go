@@ -3,10 +3,8 @@ package routes
 import (
 	"net/http"
 
-	"github.com/Polipapik/REST_API/app/models"
-
 	"github.com/Polipapik/REST_API/app/handlers"
-
+	"github.com/Polipapik/REST_API/app/models"
 	"github.com/gorilla/mux"
 )
 
