@@ -2,14 +2,12 @@ package tests
 
 import (
 	"encoding/json"
-	"log"
 	"net/http"
 	"net/http/httptest"
 	"testing"
 
 	"github.com/Polipapik/REST_API/app/handlers"
 	"github.com/Polipapik/REST_API/app/models"
-
 	"github.com/stretchr/testify/assert"
 )
 
@@ -25,7 +23,6 @@ func TestGetCountriesHandler(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	log.Println(&m)
 	recorder := httptest.NewRecorder()
 	hf := http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		handlers.GetCountries(&m, w, r)
@@ -35,23 +32,23 @@ func TestGetCountriesHandler(t *testing.T) {
 	//t.Log("wowowowowo")
 
 	if status := recorder.Code; status != http.StatusOK {
-		t.Errorf("handler returned wrong status code: got %v want %v",
+		t.Errorf("Handler returned wrong status code: got %v want %v",
 			status, http.StatusOK)
 	}
 
 	expected := tmpcountry
 
-	b := []models.Country{}
+	cs := []models.Country{}
 
-	err = json.NewDecoder(recorder.Body).Decode(&b)
+	err = json.NewDecoder(recorder.Body).Decode(&cs)
 	if err != nil {
 		t.Fatal(err)
 	}
 
-	actual := b[0]
+	actual := cs[0]
 
 	if !assert.True(t, (actual == expected)) {
-		t.Errorf("handler returned unexpected body: got %v want %v", actual, expected)
+		t.Errorf("Handler returned unexpected body: got %v want %v", actual, expected)
 	}
 	m.AssertExpectations(t)
 }

@@ -2,20 +2,13 @@ package models
 
 //GetСountries comment
 func (g *GormDB) GetСountries() ([]Country, error) {
-	countries := []Country{}
-	var err error
+	cs := []Country{}
 
-	//if count == 0 {
-	err = g.DB.Find(&countries).Error
-	// } else {
-	// 	err = g.DB.Offset(start).Limit(count).Find(&countries).Error
-	// }
-
-	if err != nil {
+	if err := g.DB.Find(&cs).Error; err != nil {
 		return nil, err
 	}
 
-	return countries, nil
+	return cs, nil
 }
 
 //GetCountry comment

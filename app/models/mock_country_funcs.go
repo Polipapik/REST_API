@@ -1,18 +1,8 @@
 package models
 
-import (
-	"log"
-)
-
 //GetСountries comment
 func (m *MockDB) GetСountries() ([]Country, error) {
-	// tmpcountry := Country{ID: 1, Name: "niceCHELIKI", Population: 1307}
-	// countries := []Country{
-	// 	tmpcountry}
-	// return countries, nil
-
 	rets := m.Called()
-	log.Println(m)
 	return rets.Get(0).([]Country), rets.Error(1)
 }
 
