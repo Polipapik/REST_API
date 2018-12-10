@@ -14,7 +14,11 @@ import (
 
 //GetCountries comment OK
 func GetCountries(db models.CountryAPI, w http.ResponseWriter, r *http.Request) {
-	cs, err := db.GetСountries()
+
+	v := r.URL.Query()
+	name := v.Get("name")
+
+	cs, err := db.GetСountries(name)
 	if err != nil {
 		utils.RespondWithError(w, http.StatusInternalServerError, err.Error())
 		return

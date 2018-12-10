@@ -1,10 +1,10 @@
 package models
 
 //GetСountries comment
-func (g *GormDB) GetСountries() ([]Country, error) {
+func (g *GormDB) GetСountries(nameFilter string) ([]Country, error) {
 	cs := []Country{}
 
-	if err := g.DB.Find(&cs).Error; err != nil {
+	if err := g.DB.Where("name LIKE ?", "%"+nameFilter+"%").Find(&cs).Error; err != nil {
 		return nil, err
 	}
 

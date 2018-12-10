@@ -9,7 +9,7 @@ type Country struct {
 
 //CountryAPI comment
 type CountryAPI interface {
-	GetСountries() ([]Country, error)
+	GetСountries(nameFilter string) ([]Country, error)
 	GetCountry(c *Country) error
 	UpdateCountry(c *Country) error
 	DeleteCountry(c *Country) error

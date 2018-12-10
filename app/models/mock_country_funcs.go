@@ -1,7 +1,7 @@
 package models
 
 //GetСountries comment
-func (m *MockDB) GetСountries() ([]Country, error) {
+func (m *MockDB) GetСountries(nameFilter string) ([]Country, error) {
 	rets := m.Called()
 	return rets.Get(0).([]Country), rets.Error(1)
 }

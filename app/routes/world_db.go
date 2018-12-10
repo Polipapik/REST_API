@@ -19,15 +19,6 @@ func (env *Env) InitializeRoutes() {
 
 	env.Router.HandleFunc("/",
 		func(w http.ResponseWriter, r *http.Request) {
-			handlers.GetCountry(env.Country, w, r)
-		}).
-		Queries( // just env try
-			"username", "{username}",
-			"email", "{email}",
-		).
-		Methods("GET")
-	env.Router.HandleFunc("/",
-		func(w http.ResponseWriter, r *http.Request) {
 			handlers.GetCountries(env.Country, w, r)
 		}).
 		Methods("GET")
