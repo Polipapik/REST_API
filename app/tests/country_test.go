@@ -12,11 +12,12 @@ import (
 )
 
 func TestGetCountriesHandler(t *testing.T) {
-	tmpcountry := models.Country{ID: 1, Name: "niceCHELIKI", Population: 1307}
+	countries := []models.Country{
+		{ID: 1, Name: "niceCHELIKI", Population: 1307},
+		{ID: 2, Name: "trueGays", Population: 228322}}
 
 	var m models.MockDB
-	m.On("GetСountries").Return([]models.Country{
-		tmpcountry}, nil).Once()
+	m.On("GetСountries").Return(countries, nil).Once()
 
 	req, err := http.NewRequest("GET", "", nil)
 	if err != nil {
@@ -27,27 +28,31 @@ func TestGetCountriesHandler(t *testing.T) {
 	hf := http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		handlers.GetCountries(&m, w, r)
 	})
-
 	hf.ServeHTTP(recorder, req)
-	//t.Log("wowowowowo")
 
 	if status := recorder.Code; status != http.StatusOK {
 		t.Errorf("Handler returned wrong status code: got %v want %v",
 			status, http.StatusOK)
 	}
 
-	expected := tmpcountry
+	expected := countries
 
 	cs := []models.Country{}
-
-	err = json.NewDecoder(recorder.Body).Decode(&cs)
-	if err != nil {
+	if err = json.NewDecoder(recorder.Body).Decode(&cs); err != nil {
 		t.Fatal(err)
 	}
+	actual := cs
 
-	actual := cs[0]
+	rly := true
+	if len(actual) == len(expected) {
+		for i := 0; i < len(actual); i++ {
+			if actual[i] != expected[i] {
+				rly = false
+			}
+		}
+	}
 
-	if !assert.True(t, (actual == expected)) {
+	if !assert.True(t, rly) {
 		t.Errorf("Handler returned unexpected body: got %v want %v", actual, expected)
 	}
 	m.AssertExpectations(t)
