@@ -50,6 +50,8 @@ func TestGetCountriesHandler(t *testing.T) {
 				rly = false
 			}
 		}
+	} else {
+		rly = false
 	}
 
 	if !assert.True(t, rly) {
